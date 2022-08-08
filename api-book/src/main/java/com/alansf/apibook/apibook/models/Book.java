@@ -1,18 +1,35 @@
 package com.alansf.apibook.apibook.models;
 
 import com.alansf.apibook.apibook.enums.ReadStatus;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import javax.persistence.*;
 import java.util.Date;
 
+@Entity
+@Table(name="Book")
+@SequenceGenerator(name="seq_book", sequenceName="book_seq", allocationSize=1)
 public class Book {
-
+    @Id
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq_book")
+    @Column(name = "idBook")
     private Integer idBook;
-    private String title;
-    private String author;
-    private Date created;
-    private Date concluded;
-    private Integer rating;
-    private Integer status;
 
+    @Column(name="title", nullable=false, length=45)
+    private String title;
+    @Column(name="author", nullable=false, length=45)
+    private String author;
+    @Column(name="created", nullable=true)
+    private Date created;
+    @Column(name="concluded", nullable=true)
+    private Date concluded;
+    @Column(name="rating", nullable=true)
+    private Integer rating;
+    @Column(name="status", nullable=false)
+    private Integer status;
+    @JsonBackReference
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="User_idUser", referencedColumnName="idUser")
     private User user;
 
     Book() { }
@@ -67,7 +84,6 @@ public class Book {
             this.status = status.getCode();
         }
     }
-
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
 }
