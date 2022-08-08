@@ -4,7 +4,7 @@ import com.alansf.apibook.apibook.enums.ReadStatus;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.Instant;
 
 @Entity
 @Table(name="Book")
@@ -14,15 +14,14 @@ public class Book {
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq_book")
     @Column(name = "idBook")
     private Integer idBook;
-
     @Column(name="title", nullable=false, length=45)
     private String title;
     @Column(name="author", nullable=false, length=45)
     private String author;
     @Column(name="created", nullable=true)
-    private Date created;
+    private Instant created;
     @Column(name="concluded", nullable=true)
-    private Date concluded;
+    private Instant concluded;
     @Column(name="rating", nullable=true)
     private Integer rating;
     @Column(name="status", nullable=false)
@@ -34,8 +33,8 @@ public class Book {
 
     Book() { }
 
-    Book(Integer idBook, String title, String author, Date created,
-         Date concluded, Integer rating, ReadStatus status) {
+    Book(Integer idBook, String title, String author, Instant created,
+         Instant concluded, Integer rating, ReadStatus status) {
         this.idBook = idBook;
         this.title = title;
         this.author = author;
@@ -60,15 +59,15 @@ public class Book {
     }
     public void setAuthor(String author) { this.author = author; }
 
-    public Date getCreated() {
+    public Instant getCreated() {
         return created;
     }
-    public void setCreated(Date created) { this.created = created; };
+    public void setCreated(Instant created) { this.created = created; };
 
-    public Date getConcluded() {
+    public Instant getConcluded() {
         return concluded;
     }
-    public void setConcluded(Date concluded) { this.concluded = concluded; }
+    public void setConcluded(Instant concluded) { this.concluded = concluded; }
 
     public Integer getRating() {
         return rating;
