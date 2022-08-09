@@ -4,6 +4,7 @@ import com.alansf.apibook.apibook.models.User;
 import com.alansf.apibook.apibook.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,6 +18,10 @@ public class UserService {
 
     public User createUser(User user) {
         return userRepository.save(user);
+    }
+
+    public List<User> listAllUsers() {
+        return userRepository.findAll();
     }
 
     public Optional<User> findUserById(Integer idUser) {

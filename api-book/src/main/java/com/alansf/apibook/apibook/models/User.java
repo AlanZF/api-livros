@@ -12,7 +12,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq_user")
-    @Column(name="idBook")
+    @Column(name="idUser")
     private Integer idUser;
     @Column(name="name", nullable=false, length=45)
     private String name;

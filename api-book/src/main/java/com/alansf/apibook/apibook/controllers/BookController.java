@@ -4,12 +4,10 @@ import com.alansf.apibook.apibook.models.Book;
 import com.alansf.apibook.apibook.models.User;
 import com.alansf.apibook.apibook.services.BookService;
 import com.alansf.apibook.apibook.services.UserService;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -18,7 +16,6 @@ public class BookController {
 
     private final BookService bookService;
     private final UserService userService;
-
     Instant dateHourNow;
 
     public BookController(BookService bookService, UserService userService) {
@@ -26,6 +23,7 @@ public class BookController {
         this.userService = userService;
     }
 
+    @PostMapping("/createBook/{idUser}")
     public Book createBook(@RequestBody Book book, @PathVariable Integer idUser) {
         Optional<User> optUser = userService.findUserById(idUser);
         User user = optUser.get();
@@ -36,5 +34,25 @@ public class BookController {
         book.setCreated(dateHourNow);
 
         return bookService.createBook(book);
+    }
+
+    @GetMapping("/listAllBooks")
+    public List<Book> listAllBooks() {
+        return bookService.listAllBooks();
+    }
+
+    @GetMapping("/findBookById/{idBook}")
+    public Optional<Book> findBookById(Integer idBook) {
+        return bookService.findBookById(idBook);
+    }
+
+    @PutMapping("/updateBook")
+    public Book updateBook(@RequestBody Book book) {
+        return bookService.updateBook(book);
+    }
+
+    @DeleteMapping("/deleteBook/{idBook}")
+    public void deleteBookById(@PathVariable Integer idBook) {
+        bookService.deleteBookById(idBook);
     }
 }
