@@ -23,7 +23,7 @@ public class BookDtoRequest {
 
     private User user;
 
-    BookDtoRequest(String title, String author, Instant created,
+    public BookDtoRequest(String title, String author, Instant created,
          Instant concluded, Integer rating, ReadStatus status) {
         this.title = title;
         this.author = author;

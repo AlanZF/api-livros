@@ -1,11 +1,16 @@
 package com.alansf.apibook.apibook.services;
 
+import com.alansf.apibook.apibook.dtos.request.UserDtoRequest;
+import com.alansf.apibook.apibook.dtos.response.UserDtoResponse;
 import com.alansf.apibook.apibook.models.User;
 import com.alansf.apibook.apibook.repositories.UserRepository;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -16,12 +21,28 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User createUser(User user) {
-        return userRepository.save(user);
+    public UserDtoResponse createUser(UserDtoRequest userRequest) {
+        User user = new User();
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+
+        user = modelMapper.map(userRequest, user.getClass());
+        userRepository.save(user);
+
+        UserDtoResponse response = new UserDtoResponse();
+        response = modelMapper.map(user, response.getClass());
+
+        return response;
     }
 
-    public List<User> listAllUsers() {
-        return userRepository.findAll();
+    public List<UserDtoResponse> listAllUsers() {
+        List<User> users = userRepository.findAll();
+
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+
+        return users.stream().map(user -> modelMapper
+                .map(user, UserDtoResponse.class)).collect(Collectors.toList());
     }
 
     public Optional<User> findUserById(Integer idUser) {
