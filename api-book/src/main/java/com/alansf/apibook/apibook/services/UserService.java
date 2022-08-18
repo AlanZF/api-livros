@@ -49,11 +49,19 @@ public class UserService {
         return userRepository.findById(idUser);
     }
 
-    public User updateUser(User user) {
-        return userRepository.save(user);
+    public UserDtoResponse updateUser(User user) {
+        userRepository.save(user);
+
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+
+        UserDtoResponse response = new UserDtoResponse();
+        response = modelMapper.map(user, response.getClass());
+
+        return response;
     }
 
-    public void deleteUserById(Integer idUser) {
-        userRepository.deleteById(idUser);
+    public void deleteUser(User user) {
+        userRepository.delete(user);
     }
 }

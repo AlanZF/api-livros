@@ -49,13 +49,25 @@ public class UserController {
     }
 
     @PutMapping("/updateUser")
-    public User updateUser(@RequestBody User user) {
-        return userService.updateUser(user);
+    public ResponseEntity<UserDtoResponse> updateUser(@RequestBody UserDtoRequest userDtoRequest,
+                                                      @PathVariable Integer idUser) {
+        Optional<User> optUser = userService.findUserById(idUser);
+        User user = optUser.get();
+
+        user.setName(userDtoRequest.getName());
+        user.setEmail(userDtoRequest.getEmail());
+
+        UserDtoResponse response = userService.updateUser(user);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @DeleteMapping("/deleteUser/{idUser}")
-    public void deleteUser(@PathVariable Integer idUser) {
-        userService.deleteUserById(idUser);
+    public ResponseEntity<?> deleteUser(@PathVariable Integer idUser) {
+        Optional<User> optUser = userService.findUserById(idUser);
+        User user = optUser.get();
+
+        userService.deleteUser(user);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 }
